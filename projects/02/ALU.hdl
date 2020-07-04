@@ -43,4 +43,29 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+   // Pre-setting the x input
+    Mux16(a=x, b=false, sel=zx, out=x1); // set x to zero
+    Not16(in=x1, out=notx1); // set x to !x
+    Mux16(a=x1, b=notx1, sel=nx, out=x2);  // negate x
+
+    // Pre-setting the y input
+    Mux16(a=y, b=false, sel=zy, out=y1);
+    Not16(in=y1, out=noty1);
+    Mux16(a=y1, b=noty1, sel=ny, out=y2);
+
+    // Selecting between computing + or &
+    Add16(a=x2, b=y2, out=xplusy);
+    And16(a=x2, b=y2, out=xandy);
+    Mux16(a=xandy, b=xplusy, sel=f, out=xy);
+
+    // finally, negate the output
+    // if out < 0, MSB will be 1, so can set ng here
+    Not16(in=xy, out=notxy);
+    Mux16(a=xy, b=notxy, sel=no, out[15]=ng, out[0..7]=part1, out[8..15]=part2, out=out);
+
+    // if all of out = 0, then Or8Way(out[0..7]) or Or8Way(out[8..15]) is false ... 
+    Or8Way(in=part1, out=or1); // checking each 8-bit chunk for nonzero
+    Or8Way(in=part2, out=or2);
+    Or(a=or1, b=or2, out=nonzero); // checking if any digits are nonzero
+    Not(in=nonzero, out=zr); 
 }
