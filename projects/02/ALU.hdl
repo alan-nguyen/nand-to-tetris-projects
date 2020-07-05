@@ -68,4 +68,4 @@ CHIP ALU {
     Or8Way(in=part2, out=or2);
     Or(a=or1, b=or2, out=nonzero); // checking if any digits are nonzero
     Not(in=nonzero, out=zr); 
-}
+}`
