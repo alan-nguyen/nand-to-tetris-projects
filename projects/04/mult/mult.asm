@@ -56,6 +56,9 @@
   D=M
   @R2
   M=D   // RAM[2] = mul
+(POSITIVE)
+  @R2
+  M=0
 (END)
   @END
   0;JMP
