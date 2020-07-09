@@ -21,3 +21,10 @@
   @WHITE
   D;JEQ 		// JMP to WHITE if no key was pressed
 
+(WHITE)
+  @R0
+  D=A     
+  @bw
+  M=D   // Assign bw to 0
+  @TOGGLE
+  0;JMP
