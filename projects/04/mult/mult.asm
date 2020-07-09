@@ -24,12 +24,16 @@
 
   @R1
   D=M
+  @POSITIVE
+  D; JEQ   // If R1 = 0 goto POSITIVE
   @n
   M=D   // n = R1
   @i
   M=1   // i = 1
   @R0
   D=M
+  @POSITIVE
+  D; JEQ   // If R0 = 0 goto POSITIVE
   @mul
   M=D   // mul = R0
 (LOOP)
