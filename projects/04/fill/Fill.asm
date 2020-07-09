@@ -28,3 +28,11 @@
   M=D   // Assign bw to 0
   @TOGGLE
   0;JMP
+
+(BLACK)
+  @R0
+  D=!A    	
+  @bw
+  M=D   // Assign bw to -1	
+  @TOGGLE
+  0;JMP
