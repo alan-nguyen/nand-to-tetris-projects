@@ -42,3 +42,24 @@
   D=A     // Total pixels of memory map 
   @i 			// Toggle counter
   M=D
+
+(LOOP)  
+  @i
+  D=M
+  @SCREEN
+  D=A+D   
+  @pixel
+  M=D     
+  @bw 		
+  D=M
+  @pixel
+  A=M     // Assign pixel to memory map 
+  M=D     // Set pixel to back(-1) or white(0)
+  @i
+  MD=M-1    // i = i - 1
+
+  @LOOP
+  D;JGE 		
+
+  @KEYCHECK 
+  0;JMP
