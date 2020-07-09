@@ -12,3 +12,12 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+
+(KEYCHECK)
+  @KBD 		
+  D=M
+  @BLACK
+  D;JNE 		// JMP to BLACK if keyboard was pressed
+  @WHITE
+  D;JEQ 		// JMP to WHITE if no key was pressed
+
