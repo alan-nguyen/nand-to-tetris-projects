@@ -36,3 +36,9 @@
   M=D   // Assign bw to -1	
   @TOGGLE
   0;JMP
+
+(TOGGLE) 		
+  @8191
+  D=A     // Total pixels of memory map 
+  @i 			// Toggle counter
+  M=D
