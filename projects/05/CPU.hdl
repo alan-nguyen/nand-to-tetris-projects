@@ -40,4 +40,46 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    Not(in=instruction[15],out=ni);
+	Mux16(a=outALU,b=instruction,sel=ni,out=outMux);
+
+	Or(a=ni,b=instruction[5],out=intoA);
+    // addressM = out[0..14] as out[15] is op-code
+	ARegister(in=outMux,load=intoA,out=outAReg,out[0..14]=addressM);
+
+    // Select ALU's input from A or M
+	And(a=instruction[15],b=instruction[12],out=AorM); // a(op-code), b(AReg control bit)
+	Mux16(a=outAReg,b=inM,sel=AorM,out=outAMmux);
+	
+	ALU(x=outDReg,y=outAMmux,zx=instruction[11],nx=instruction[10],zy=instruction[9],ny=instruction[8],f=instruction[7],no=instruction[6],out=outALU,out=outM,zr=zr,ng=ng);
+
+    // Load into D if both op-code and DReg control bit are 1
+	And(a=instruction[15],b=instruction[4],out=intoD);
+	DRegister(in=outALU,load=intoD,out=outDReg);
+    // M (Ram[A]) if both op-code and d3 are 1
+	And(a=instruction[15],b=instruction[3],out=writeM);
+
+    // Jump
+	Not(in=ng,out=pos);
+	Not(in=zr,out=nzr);
+    // Handle JGT
+	And(a=instruction[15],b=instruction[0],out=jgt);
+	And(a=pos,b=nzr,out=posnzr);
+	And(a=jgt,b=posnzr,out=ld1);
+    
+    // Handle JEQ
+	And(a=instruction[15],b=instruction[1],out=jeq);
+	And(a=jeq,b=zr,out=ld2);
+
+    // Handle JLT
+	And(a=instruction[15],b=instruction[2],out=jlt);
+	And(a=jlt,b=ng,out=ld3);
+
+    // Jump if j2 or j3 = 1
+	Or(a=ld1,b=ld2,out=ldt);
+
+    // Jumpp if j1 or j2 or j3 = 1
+	Or(a=ld3,b=ldt,out=ld);
+
+	PC(in=outAReg,load=ld,inc=true,reset=reset,out[0..14]=pc);
 }
