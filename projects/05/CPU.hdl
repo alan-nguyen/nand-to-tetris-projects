@@ -40,12 +40,12 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    // op-code = 0 (a-instruction)
     Not(in=instruction[15],out=ni);
 	Mux16(a=outALU,b=instruction,sel=ni,out=outMux);
-
+    // load if op-code = 0 Or d1(A register) = 1
 	Or(a=ni,b=instruction[5],out=intoA);
-    // addressM = out[0..14] as out[15] is op-code
-	ARegister(in=outMux,load=intoA,out=outAReg,out[0..14]=addressM);
+	ARegister(in=outMux,load=intoA,out=outAReg,out[0..14]=addressM); // addressM = out[0..14] as out[15] is op-code
 
     // Select ALU's input from A or M
 	And(a=instruction[15],b=instruction[12],out=AorM); // a(op-code), b(AReg control bit)
